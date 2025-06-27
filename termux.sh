@@ -33,13 +33,13 @@ echo "📁 Creating bot directory..."
 cd $HOME
 if [ -d "hisoka-bot" ]; then
     echo "⚠️ Directory 'hisoka-bot' already exists. Removing..."
-    rm -rf hisoka-bot
+    rm -rf Wa-his-v2
 fi
 
 # Clone or create bot files
 echo "📥 Setting up bot files..."
-mkdir hisoka-bot
-cd hisoka-bot
+git clone https://github.com/hhhisoka/Wa-his-v2
+cd Wa-his-v2
 
 # Create package.json
 cat > package.json << 'EOF'
@@ -68,13 +68,13 @@ EOF
 
 # Install npm dependencies
 echo "📦 Installing bot dependencies..."
-npm install
+npm install --force
 
 echo ""
 echo "✅ Installation completed successfully!"
 echo ""
 echo "📋 Next steps:"
-echo "1. cd hisoka-bot"
+echo "1. cd Wa-his-v2"
 echo "2. Configure your settings in settings.js"
 echo "3. Set your owner number and prefix"
 echo "4. Run: npm start"
