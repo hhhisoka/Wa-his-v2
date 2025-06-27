@@ -58,7 +58,7 @@
 ### Installation Rapide
 ```bash
 # Télécharger et exécuter le script d'installation
-curl -O https://raw.githubusercontent.com/votre-repo/hisoka-bot/main/termux.sh
+curl -O https://raw.githubusercontent.com/hhhisoka/Wa-his-v2/main/termux.sh
 chmod +x termux.sh
 ./termux.sh
 ```
