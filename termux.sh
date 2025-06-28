@@ -86,6 +86,7 @@ create_package_json() {
   "license": "MIT",
   "dependencies": {
     "@whiskeysockets/baileys": "^6.7.8",
+     "qrcode-terminal": "^0.12.0",
     "@hapi/boom": "^10.0.1",
     "axios": "^1.6.0",
     "chalk": "^4.1.2",
