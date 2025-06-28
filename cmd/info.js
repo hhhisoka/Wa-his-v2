@@ -6,6 +6,7 @@
 const { commands } = require('../lib/commands.js');
 const { bot } = require('../settings.js');
 const { getStats } = require('../lib/database.js');
+const { getBotInstance } = require('../lib/bot-instance.js');
 const { Func } = require('../lib/functions.js');
 
 // Bot information command
@@ -27,7 +28,7 @@ commands.add({
         info += `│ 👥 *Total Users:* ${stats.totalUsers}\n`;
         info += `│ 🏘️ *Total Groups:* ${stats.totalGroups}\n`;
         info += `│ ⚡ *Commands Used:* ${stats.totalCommands}\n`;
-        info += `│ 🤖 *Bot Number:* ${rav.user.id.split(':')[0]}\n`;
+        info += `│ 🤖 *Bot Number:* ${getBotInstance().user.id.split(':')[0]}\n`;
         info += `╰────────────────────`;
         
         await reply(info);

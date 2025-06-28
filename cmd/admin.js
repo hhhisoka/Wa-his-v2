@@ -7,7 +7,7 @@ const { commands } = require('../lib/commands.js');
 const { bot, isOwner } = require('../settings.js');
 const { updateUser, getUser, usersDB, groupsDB, getStats } = require('../lib/database.js');
 const { Func } = require('../lib/functions.js');
-const { isAdmin, isBotAdmin } = require('../lib/connection.js');
+const { getBotInstance, isAdmin, isBotAdmin, sendMessage } = require('../lib/bot-instance.js');
 
 // Enable/disable commands
 commands.add({
@@ -291,7 +291,7 @@ commands.add({
             
             for (const groupId of groups) {
                 try {
-                    await rav.sendMessage(groupId, { text: announcement });
+                    await getBotInstance().sendMessage(groupId, { text: announcement });
                     successCount++;
                     await new Promise(resolve => setTimeout(resolve, 1000)); // 1 second delay
                 } catch (error) {

@@ -5,7 +5,7 @@
 
 const { commands } = require('../lib/commands.js');
 const { getGroup, setGroupSetting, getGroupSetting } = require('../lib/database.js');
-const { getGroupMetadata, isAdmin, isBotAdmin } = require('../lib/connection.js');
+const { getBotInstance, getGroupMetadata, isAdmin, isBotAdmin } = require('../lib/bot-instance.js');
 const { Func } = require('../lib/functions.js');
 
 // Group information
@@ -99,7 +99,7 @@ commands.add({
             // Mention all members
             const mentions = metadata.participants.map(p => p.id);
             
-            await rav.sendMessage(m.key.remoteJid, {
+            await getBotInstance().sendMessage(m.key.remoteJid, {
                 text: memberList,
                 mentions: mentions
             });
@@ -143,7 +143,7 @@ commands.add({
                 return await reply('❌ Cannot kick group admin.');
             }
             
-            await rav.groupParticipantsUpdate(groupId, [targetId], 'remove');
+            await getBotInstance().groupParticipantsUpdate(groupId, [targetId], 'remove');
             await reply(`✅ Successfully removed @${targetId.split('@')[0]} from the group.`);
             
         } catch (error) {
@@ -173,7 +173,7 @@ commands.add({
             const targetId = number + '@s.whatsapp.net';
             const groupId = m.key.remoteJid;
             
-            const result = await rav.groupParticipantsUpdate(groupId, [targetId], 'add');
+            const result = await getBotInstance().groupParticipantsUpdate(groupId, [targetId], 'add');
             
             if (result[0].status === '200') {
                 await reply(`✅ Successfully added @${number} to the group.`);
@@ -214,7 +214,7 @@ commands.add({
             
             const groupId = m.key.remoteJid;
             
-            await rav.groupParticipantsUpdate(groupId, [targetId], 'promote');
+            await getBotInstance().groupParticipantsUpdate(groupId, [targetId], 'promote');
             await reply(`✅ Successfully promoted @${targetId.split('@')[0]} to admin.`);
             
         } catch (error) {
@@ -250,7 +250,7 @@ commands.add({
             
             const groupId = m.key.remoteJid;
             
-            await rav.groupParticipantsUpdate(groupId, [targetId], 'demote');
+            await getBotInstance().groupParticipantsUpdate(groupId, [targetId], 'demote');
             await reply(`✅ Successfully demoted @${targetId.split('@')[0]} to member.`);
             
         } catch (error) {
@@ -276,7 +276,7 @@ commands.add({
             const newName = args.join(' ');
             const groupId = m.key.remoteJid;
             
-            await rav.groupUpdateSubject(groupId, newName);
+            await getBotInstance().groupUpdateSubject(groupId, newName);
             await reply(`✅ Group name changed to: ${newName}`);
             
         } catch (error) {
@@ -302,7 +302,7 @@ commands.add({
             const newDesc = args.join(' ');
             const groupId = m.key.remoteJid;
             
-            await rav.groupUpdateDescription(groupId, newDesc);
+            await getBotInstance().groupUpdateDescription(groupId, newDesc);
             await reply(`✅ Group description updated.`);
             
         } catch (error) {
@@ -366,7 +366,7 @@ commands.add({
     run: async ({ rav, m, reply }) => {
         try {
             const groupId = m.key.remoteJid;
-            await rav.groupSettingUpdate(groupId, 'announcement');
+            await getBotInstance().groupSettingUpdate(groupId, 'announcement');
             await reply('🔒 Group locked. Only admins can send messages.');
         } catch (error) {
             await reply(`❌ Failed to lock group: ${error.message}`);
@@ -386,7 +386,7 @@ commands.add({
     run: async ({ rav, m, reply }) => {
         try {
             const groupId = m.key.remoteJid;
-            await rav.groupSettingUpdate(groupId, 'not_announcement');
+            await getBotInstance().groupSettingUpdate(groupId, 'not_announcement');
             await reply('🔓 Group unlocked. All members can send messages.');
         } catch (error) {
             await reply(`❌ Failed to unlock group: ${error.message}`);
@@ -405,7 +405,7 @@ commands.add({
     run: async ({ rav, m, reply }) => {
         await reply('👋 Goodbye! Thanks for using Hisoka-md/his-v0');
         setTimeout(async () => {
-            await rav.groupLeave(m.key.remoteJid);
+            await getBotInstance().groupLeave(m.key.remoteJid);
         }, 2000);
     }
 });

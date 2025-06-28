@@ -4,6 +4,7 @@
  */
 
 const { commands } = require('../lib/commands.js');
+const { getBotInstance } = require('../lib/bot-instance.js');
 const { Func } = require('../lib/functions.js');
 const axios = require('axios');
 
@@ -54,7 +55,7 @@ commands.add({
             const text = args.join(' ');
             const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(text)}`;
             
-            await rav.sendMessage(m.key.remoteJid, {
+            await getBotInstance().sendMessage(m.key.remoteJid, {
                 image: { url: qrUrl },
                 caption: `📱 *QR Code Generated*\n\n🔤 *Text:* ${text}`
             });

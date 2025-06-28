@@ -6,6 +6,7 @@
 const { commands } = require('../lib/commands.js');
 const { bot } = require('../settings.js');
 const { usersDB, groupsDB, blockUser, unblockUser, getStats } = require('../lib/database.js');
+const { getBotInstance } = require('../lib/bot-instance.js');
 const { Func } = require('../lib/functions.js');
 
 // Block user command
@@ -105,7 +106,7 @@ commands.add({
         // Send to all users
         for (const userId of users) {
             try {
-                await rav.sendMessage(userId, { text: broadcastMessage });
+                await getBotInstance().sendMessage(userId, { text: broadcastMessage });
                 successCount++;
                 await new Promise(resolve => setTimeout(resolve, 100)); // Delay to avoid spam
             } catch (error) {
@@ -116,7 +117,7 @@ commands.add({
         // Send to all groups
         for (const groupId of groups) {
             try {
-                await rav.sendMessage(groupId, { text: broadcastMessage });
+                await getBotInstance().sendMessage(groupId, { text: broadcastMessage });
                 successCount++;
                 await new Promise(resolve => setTimeout(resolve, 100));
             } catch (error) {
@@ -214,7 +215,7 @@ commands.add({
             const backupData = JSON.stringify(backup, null, 2);
             const filename = `hisoka-backup-${Date.now()}.json`;
             
-            await rav.sendMessage(m.key.remoteJid, {
+            await getBotInstance().sendMessage(m.key.remoteJid, {
                 document: Buffer.from(backupData),
                 fileName: filename,
                 mimetype: 'application/json',
@@ -240,7 +241,7 @@ commands.add({
     run: async ({ args, rav, reply }) => {
         try {
             const status = args.join(' ');
-            await rav.updateProfileStatus(status);
+            await getBotInstance().updateProfileStatus(status);
             await reply(`✅ Status updated to: ${status}`);
         } catch (error) {
             await reply(`❌ Failed to update status: ${error.message}`);
@@ -257,17 +258,17 @@ commands.add({
     owner: true,
     run: async ({ rav, reply }) => {
         try {
-            const profile = await rav.fetchStatus(rav.user.id);
-            const ppUrl = await rav.profilePictureUrl(rav.user.id, 'image').catch(() => null);
+            const profile = await getBotInstance().fetchStatus(getBotInstance().user.id);
+            const ppUrl = await getBotInstance().profilePictureUrl(getBotInstance().user.id, 'image').catch(() => null);
             
             let profileInfo = `╭─「 *Bot Profile* 」\n`;
-            profileInfo += `│ 📱 *Number:* ${rav.user.id.split(':')[0]}\n`;
+            profileInfo += `│ 📱 *Number:* ${getBotInstance().user.id.split(':')[0]}\n`;
             profileInfo += `│ 📝 *Status:* ${profile?.status || 'No status'}\n`;
             profileInfo += `│ 🖼️ *Profile Picture:* ${ppUrl ? 'Available' : 'Not set'}\n`;
             profileInfo += `╰────────────────────`;
             
             if (ppUrl) {
-                await rav.sendMessage(m.key.remoteJid, {
+                await getBotInstance().sendMessage(m.key.remoteJid, {
                     image: { url: ppUrl },
                     caption: profileInfo
                 });

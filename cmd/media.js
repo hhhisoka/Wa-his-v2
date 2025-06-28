@@ -4,6 +4,7 @@
  */
 
 const { commands } = require('../lib/commands.js');
+const { getBotInstance } = require('../lib/bot-instance.js');
 const { Func, dl } = require('../lib/functions.js');
 const { exec } = require('child_process');
 const { promisify } = require('util');
@@ -116,7 +117,7 @@ commands.add({
             await reply('⏳ Converting to sticker...');
             
             // Download media
-            const buffer = await rav.downloadMediaMessage(m.message.extendedTextMessage.contextInfo.quotedMessage, 'buffer');
+            const buffer = await getBotInstance().downloadMediaMessage(m.message.extendedTextMessage.contextInfo.quotedMessage, 'buffer');
             
             const inputFile = join('./temp', `input_${Date.now()}.${isVideo ? 'mp4' : 'jpg'}`);
             const outputFile = join('./temp', `sticker_${Date.now()}.webp`);
@@ -138,7 +139,7 @@ commands.add({
             if (existsSync(outputFile)) {
                 const stickerBuffer = readFileSync(outputFile);
                 
-                await rav.sendMessage(m.key.remoteJid, {
+                await getBotInstance().sendMessage(m.key.remoteJid, {
                     sticker: stickerBuffer
                 });
                 
@@ -171,7 +172,7 @@ commands.add({
             await reply('⏳ Converting sticker to image...');
             
             // Download sticker
-            const buffer = await rav.downloadMediaMessage(m.message.extendedTextMessage.contextInfo.quotedMessage, 'buffer');
+            const buffer = await getBotInstance().downloadMediaMessage(m.message.extendedTextMessage.contextInfo.quotedMessage, 'buffer');
             
             const inputFile = join('./temp', `sticker_${Date.now()}.webp`);
             const outputFile = join('./temp', `image_${Date.now()}.jpg`);
@@ -185,7 +186,7 @@ commands.add({
             if (existsSync(outputFile)) {
                 const imageBuffer = readFileSync(outputFile);
                 
-                await rav.sendMessage(m.key.remoteJid, {
+                await getBotInstance().sendMessage(m.key.remoteJid, {
                     image: imageBuffer,
                     caption: '✅ Sticker converted to image'
                 });
@@ -224,7 +225,7 @@ commands.add({
             await reply('⏳ Extracting audio from video...');
             
             // Download video
-            const buffer = await rav.downloadMediaMessage(m.message.extendedTextMessage.contextInfo.quotedMessage, 'buffer');
+            const buffer = await getBotInstance().downloadMediaMessage(m.message.extendedTextMessage.contextInfo.quotedMessage, 'buffer');
             
             const inputFile = join('./temp', `video_${Date.now()}.mp4`);
             const outputFile = join('./temp', `audio_${Date.now()}.mp3`);
@@ -238,7 +239,7 @@ commands.add({
             if (existsSync(outputFile)) {
                 const audioBuffer = readFileSync(outputFile);
                 
-                await rav.sendMessage(m.key.remoteJid, {
+                await getBotInstance().sendMessage(m.key.remoteJid, {
                     audio: audioBuffer,
                     mimetype: 'audio/mp4',
                     ptt: false
@@ -273,7 +274,7 @@ commands.add({
             await reply('⏳ Converting to voice note...');
             
             // Download media
-            const buffer = await rav.downloadMediaMessage(m.message.extendedTextMessage.contextInfo.quotedMessage, 'buffer');
+            const buffer = await getBotInstance().downloadMediaMessage(m.message.extendedTextMessage.contextInfo.quotedMessage, 'buffer');
             
             const inputFile = join('./temp', `input_${Date.now()}.${quoted.videoMessage ? 'mp4' : 'mp3'}`);
             const outputFile = join('./temp', `voice_${Date.now()}.ogg`);
@@ -287,7 +288,7 @@ commands.add({
             if (existsSync(outputFile)) {
                 const voiceBuffer = readFileSync(outputFile);
                 
-                await rav.sendMessage(m.key.remoteJid, {
+                await getBotInstance().sendMessage(m.key.remoteJid, {
                     audio: voiceBuffer,
                     mimetype: 'audio/ogg; codecs=opus',
                     ptt: true
@@ -322,7 +323,7 @@ commands.add({
             await reply('⏳ Enhancing image quality...');
             
             // Download image
-            const buffer = await rav.downloadMediaMessage(m.message.extendedTextMessage.contextInfo.quotedMessage, 'buffer');
+            const buffer = await getBotInstance().downloadMediaMessage(m.message.extendedTextMessage.contextInfo.quotedMessage, 'buffer');
             
             const inputFile = join('./temp', `input_${Date.now()}.jpg`);
             const outputFile = join('./temp', `enhanced_${Date.now()}.jpg`);
@@ -336,7 +337,7 @@ commands.add({
             if (existsSync(outputFile)) {
                 const enhancedBuffer = readFileSync(outputFile);
                 
-                await rav.sendMessage(m.key.remoteJid, {
+                await getBotInstance().sendMessage(m.key.remoteJid, {
                     image: enhancedBuffer,
                     caption: '✅ Image enhanced'
                 });
@@ -377,7 +378,7 @@ commands.add({
             await reply(`⏳ Compressing image (${quality}% quality)...`);
             
             // Download image
-            const buffer = await rav.downloadMediaMessage(m.message.extendedTextMessage.contextInfo.quotedMessage, 'buffer');
+            const buffer = await getBotInstance().downloadMediaMessage(m.message.extendedTextMessage.contextInfo.quotedMessage, 'buffer');
             
             const inputFile = join('./temp', `input_${Date.now()}.jpg`);
             const outputFile = join('./temp', `compressed_${Date.now()}.jpg`);
@@ -394,7 +395,7 @@ commands.add({
                 const compressedSize = compressedBuffer.length;
                 const savedPercent = ((originalSize - compressedSize) / originalSize * 100).toFixed(1);
                 
-                await rav.sendMessage(m.key.remoteJid, {
+                await getBotInstance().sendMessage(m.key.remoteJid, {
                     image: compressedBuffer,
                     caption: `✅ Image compressed\n📏 Original: ${Func.formatSize(originalSize)}\n📦 Compressed: ${Func.formatSize(compressedSize)}\n💾 Saved: ${savedPercent}%`
                 });
